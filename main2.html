@@ -906,10 +906,9 @@
             async loadPokemon() {
                 try {
                     const response = await fetch('pokemon.json');
-                    const data = await response.json()
-                    this.allPokemon = data
+                    const data = await response.json();
+                    this.allPokemon = data;
                     this.filteredPokemon = [...this.allPokemon];
-                    this.renderPokemon();
                 } catch (error) {
                     console.error('Error loading Pokemon:', error);
                 }
@@ -936,4 +935,141 @@
                         weight: data.weight,
                         abilities: data.abilities.map(ability => ability.ability.name),
                         species_url: data.species.url
-                    };
+                    }                } catch (error) {
+                    console.error(`Error fetching Pokemon ${id}:`, error);
+                    return null;
+                }
+            }
+
+            getGeneration(id) {
+                for (const [gen, range] of Object.entries(this.generationRanges)) {
+                    if (id >= range[0] && id <= range[1]) {
+                        return parseInt(gen);
+                    }
+                }
+                return 1;
+            }
+
+            filterPokemon() {
+                this.filteredPokemon = this.allPokemon.filter(pokemon => {
+                    const matchesSearch = !this.searchTerm || 
+                        pokemon.name.toLowerCase().includes(this.searchTerm) ||
+                        pokemon.id.toString().includes(this.searchTerm);
+                    
+                    const matchesGeneration = this.currentGeneration === "all" || 
+                        this.getGeneration(pokemon.id) === parseInt(this.currentGeneration);
+                    
+                    const matchesType = this.currentType === "all" || 
+                        pokemon.types.includes(this.currentType);
+                    
+                    return matchesSearch && matchesGeneration && matchesType;
+                });
+                
+                this.renderPokemon();
+            }
+
+            renderPokemon() {
+                const grid = document.getElementById("pokemonGrid");
+                
+                if (this.filteredPokemon.length === 0) {
+                    grid.innerHTML = "<div class=\"no-results\">No Pokémon found matching your criteria.</div>";
+                    return;
+                }
+                
+                grid.innerHTML = this.filteredPokemon.map(pokemon => this.createPokemonCard(pokemon)).join("");
+                
+                // Add click event listeners to cards
+                document.querySelectorAll(".pokemon-card").forEach(card => {
+                    card.addEventListener("click", () => {
+                        const pokemonId = parseInt(card.dataset.id);
+                        this.showPokemonDetails(pokemonId);
+                    });
+                });
+            }
+
+            createPokemonCard(pokemon) {
+                const generation = this.getGeneration(pokemon.id);
+                const primaryType = pokemon.types[0];
+                
+                return `
+                    <div class="pokemon-card type-${primaryType} fade-in" data-id="${pokemon.id}">
+                        <div class="pokemon-image">
+                            <img src="${pokemon.image}" alt="${pokemon.name}" loading="lazy">
+                        </div>
+                        <h3 class="pokemon-name">${pokemon.name}</h3>
+                        <p class="pokemon-id">#${pokemon.id.toString().padStart(3, "0")}</p>
+                        <div class="pokemon-types">
+                            ${pokemon.types.map(type => `<span class="type-badge ${type}">${type}</span>`).join("")}
+                        </div>
+                        <div class="pokemon-generation">
+                            Generation ${generation} • ${this.regionMap[generation]}
+                        </div>
+                    </div>
+                `;
+            }
+
+            async showPokemonDetails(pokemonId) {
+                const pokemon = this.allPokemon.find(p => p.id === pokemonId);
+                if (!pokemon) return;
+
+                // Update modal content
+                document.getElementById("modalPokemonImage").src = pokemon.image;
+                document.getElementById("modalPokemonName").textContent = pokemon.name;
+                document.getElementById("modalPokemonId").textContent = `#${pokemon.id.toString().padStart(3, "0")}`;
+                
+                // Update types
+                const typesContainer = document.getElementById("modalPokemonTypes");
+                typesContainer.innerHTML = pokemon.types.map(type => 
+                    `<span class="type-badge ${type}">${type}</span>`
+                ).join("");
+
+                // Update stats
+                const statsContainer = document.getElementById("modalStats");
+                statsContainer.innerHTML = pokemon.stats.map(stat => `
+                    <div class="stat-item">
+                        <div class="stat-value">${stat.value}</div>
+                        <div class="stat-name">${stat.name.replace("-", " ")}</div>
+                    </div>
+                `).join("");
+
+                // Update moves
+                const movesContainer = document.getElementById("modalMoves");
+                movesContainer.innerHTML = pokemon.moves.map(move => 
+                    `<div class="move-item">${move.replace("-", " ")}</div>`
+                ).join("");
+
+                // Update region info
+                const generation = this.getGeneration(pokemon.id);
+                document.getElementById("modalRegion").innerHTML = `
+                    <p><strong>Region:</strong> ${this.regionMap[generation]}</p>
+                    <p><strong>Generation:</strong> ${generation}</p>
+                    <p><strong>Height:</strong> ${pokemon.height / 10} m</p>
+                    <p><strong>Weight:</strong> ${pokemon.weight / 10} kg</p>
+                    <p><strong>Abilities:</strong> ${pokemon.abilities.join(", ")}</p>
+                `;
+
+                // Update evolution chain (simplified)
+                document.getElementById("modalEvolution").innerHTML = `
+                    <div class="evolution-pokemon">
+                        <img src="${pokemon.image}" alt="${pokemon.name}">
+                        <p>${pokemon.name}</p>
+                    </div>
+                `;
+
+                // Update anime appearances (placeholder)
+                document.getElementById("modalAnime").innerHTML = `
+                    <p>This Pokémon has appeared in various episodes of the Pokémon anime series.</p>
+                `;
+
+                // Show modal
+                document.getElementById("pokemonModal").style.display = "block";
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            new PokemonApp();
+        });
+    </script>
+</body>
+</html>
