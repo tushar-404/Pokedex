@@ -8,6 +8,7 @@ class EmberPokedex {
         this.searchTerm = '';
         this.currentTheme = 'fire'; // Default theme
         this.themeTransitionTimeout = null;
+        this.filterTimeout = null;
         
         // Generation ranges for filtering
         this.generationRanges = {
@@ -65,10 +66,14 @@ class EmberPokedex {
             if (query.length > 0) {
                 searchTimeout = setTimeout(() => {
                     this.showSearchDropdown(query);
-                }, 300); // 300ms delay for better UX
+                }, 500); // Increased delay from 300ms to 500ms for better performance
             } else {
                 this.hideSearchDropdown();
-                this.filterAndRender();
+                // Debounce the filter and render
+                clearTimeout(this.filterTimeout);
+                this.filterTimeout = setTimeout(() => {
+                    this.filterAndRender();
+                }, 200);
             }
         });
         
@@ -590,44 +595,49 @@ class EmberPokedex {
         return types.map(type => advantages[type] || 'Balanced type').join('; ');
     }
     
-    // Visual effects
+    // Optimized visual effects with reduced particle count
     addFlameEffects() {
-        // Start the ash particle system
+        // Start the ash particle system with reduced frequency
         this.initAshParticles();
     }
     
     initAshParticles() {
         const container = document.getElementById('ashParticles');
         
-        // Create initial batch of particles
+        // Create initial smaller batch of particles
         this.createAshBatch();
         
-        // Continuously create new particles
+        // Reduce frequency and particle count
         setInterval(() => {
             this.createAshBatch();
-        }, 2000); // Create new batch every 2 seconds
+        }, 4000); // Create new batch every 4 seconds (reduced from 2)
     }
     
     createAshBatch() {
         const container = document.getElementById('ashParticles');
-        const particleCount = Math.floor(Math.random() * 8) + 5; // 5-12 particles per batch
+        const particleCount = Math.floor(Math.random() * 3) + 2; // 2-4 particles per batch (reduced from 5-12)
         
         for (let i = 0; i < particleCount; i++) {
             setTimeout(() => {
                 this.createAshParticle(container);
-            }, Math.random() * 1000); // Stagger creation over 1 second
+            }, Math.random() * 1000);
         }
     }
     
     createAshParticle(container) {
+        // Limit total particles to prevent memory issues
+        if (container.children.length > 15) {
+            return;
+        }
+        
         const particle = document.createElement('div');
         
         // Random particle properties
         const size = Math.random();
         const colorType = Math.random();
         const startX = Math.random() * 100;
-        const animationDuration = 12 + Math.random() * 8; // 12-20 seconds
-        const delay = Math.random() * 2; // 0-2 second delay
+        const animationDuration = 8 + Math.random() * 4; // 8-12 seconds (reduced from 12-20)
+        const delay = Math.random() * 1; // 0-1 second delay (reduced from 0-2)
         
         // Determine particle class based on size
         let sizeClass = '';
@@ -713,23 +723,28 @@ class EmberPokedex {
         }, 2000);
     }
     
-    // Dynamic Theme System
+    // Optimized Dynamic Theme System
     startDynamicTheming() {
         // Start with a mixed theme blend
         this.applyGlobalTheme('mixed');
         
-        // Cycle through themes based on visible Pokémon
+        // Reduce theme change frequency to improve performance
         setInterval(() => {
             this.updateThemeBasedOnVisible();
-        }, 5000); // Change theme every 5 seconds
+        }, 10000); // Change theme every 10 seconds (reduced from 5)
         
-        // Add scroll-based theme changes
+        // Throttle scroll-based theme changes
         let scrollTimeout;
+        let isScrolling = false;
         window.addEventListener('scroll', () => {
+            if (isScrolling) return;
+            
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
                 this.updateThemeBasedOnVisible();
-            }, 500);
+                isScrolling = false;
+            }, 1000); // Increased delay from 500ms to 1000ms
+            isScrolling = true;
         });
     }
     
