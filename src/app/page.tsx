@@ -9,17 +9,17 @@ import PokemonCard from '../components/PokemonCard';
 import PokemonModal from '../components/PokemonModal';
 
 export default function Pokedex() {
-  // State Management
+  
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [selectedGen, setSelectedGen] = useState<string>('all');
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(true);
   
-  // Performance: Only show this many pokemon initially
+  
   const [visibleCount, setVisibleCount] = useState(24);
 
-  // Force scroll to top on mount + Simulate loading
+  
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.scrollTo(0, 0); 
@@ -36,7 +36,7 @@ export default function Pokedex() {
     }
   }, [selectedPokemon]);
 
-  // Helpers
+  
   const getGeneration = (id: number) => {
     if (id <= 151) return 1;
     if (id <= 251) return 2;
@@ -52,7 +52,7 @@ export default function Pokedex() {
     return roman[num - 1] || num;
   };
 
-  // 1. First, get ALL matching pokemon based on filters
+  
   const allMatches = useMemo(() => {
     return (pokemonData as Pokemon[]).filter(p => {
       const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) || 
@@ -63,12 +63,12 @@ export default function Pokedex() {
     });
   }, [search, selectedType, selectedGen]);
 
-  // 2. Then, slice the list to only show what is visible
+  
   const visiblePokemon = useMemo(() => {
     return allMatches.slice(0, visibleCount);
   }, [allMatches, visibleCount]);
 
-  // Handle clicking an evolution in the modal
+  
   const handleEvolutionClick = (id: number) => {
     const targetPokemon = (pokemonData as Pokemon[]).find((p) => p.id === id);
     if (targetPokemon) setSelectedPokemon(targetPokemon);
@@ -78,7 +78,6 @@ export default function Pokedex() {
     <main className="min-h-screen relative p-4 md:p-8">
       <FlameBackground />
 
-      {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 z-50 bg-bg-dark flex flex-col items-center justify-center transition-opacity duration-500">
            <div className="w-16 h-16 border-4 border-accent-primary border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -86,7 +85,6 @@ export default function Pokedex() {
         </div>
       )}
 
-      {/* Header Section */}
       <header className="relative z-10 flex flex-col items-center mb-10 mt-4">
         <div className="flex items-center gap-3 mb-2 animate-[float_6s_ease-in-out_infinite]">
             <div className="relative">
@@ -108,11 +106,9 @@ export default function Pokedex() {
         <p className="text-accent-secondary tracking-[0.3em] uppercase text-xs md:text-sm font-bold opacity-80">Ignite Your Journey</p>
       </header>
 
-      {/* Controls */}
       <div className="relative z-10 max-w-6xl mx-auto mb-12 glass-panel p-6 rounded-3xl border border-white/10 shadow-2xl">
         <div className="flex flex-col md:flex-row gap-4">
             
-            {/* Search Bar */}
             <div className="flex-1 relative group">
                 <input 
                     type="text"
@@ -127,7 +123,6 @@ export default function Pokedex() {
                 <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl group-focus-within:scale-125 transition-transform">🔍</span>
             </div>
             
-            {/* Type Filter */}
             <div className="relative">
                 <select 
                     value={selectedType}
@@ -160,13 +155,12 @@ export default function Pokedex() {
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-accent-primary">▼</div>
             </div>
 
-             {/* Gen Filter */}
              <div className="relative">
                 <select 
                     value={selectedGen}
                     onChange={(e) => {
                       setSelectedGen(e.target.value);
-                      setVisibleCount(24); // ✅ Reset directly here
+                      setVisibleCount(24); 
                     }}
                     className="w-full md:w-auto appearance-none bg-bg-ui border-2 border-transparent hover:border-white/20 focus:border-accent-primary rounded-full px-8 py-4 text-white font-bold outline-none cursor-pointer transition-all shadow-lg"
                 >
@@ -184,10 +178,8 @@ export default function Pokedex() {
         </div>
       </div>
 
-      {/* The Grid */}
       <div className="relative z-10 max-w-7xl mx-auto pb-20 space-y-16">
         
-        {/* Empty State */}
         {allMatches.length === 0 && (
             <div className="flex flex-col items-center justify-center py-20 opacity-50">
                 <div className="text-6xl mb-4 grayscale">🔥</div>
@@ -196,9 +188,8 @@ export default function Pokedex() {
             </div>
         )}
 
-        {/* Separated by Generation */}
         {[1, 2, 3, 4, 5, 6, 7].map((gen) => {
-           // Filter from the VISIBLE list, not the full list to keep DOM light
+           
            const genPokemon = visiblePokemon.filter(p => getGeneration(p.id) === gen);
            
            if (genPokemon.length === 0) return null;
@@ -226,7 +217,6 @@ export default function Pokedex() {
            );
         })}
 
-        {/* Load More Button */}
         {visibleCount < allMatches.length && (
             <div className="flex justify-center pt-8">
                 <button 
@@ -239,7 +229,6 @@ export default function Pokedex() {
         )}
       </div>
 
-      {/* Modal */}
       {selectedPokemon && (
         <PokemonModal 
             pokemon={selectedPokemon} 

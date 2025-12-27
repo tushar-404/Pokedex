@@ -2,10 +2,7 @@
 
 @import "tailwindcss";
 
-/* In Tailwind v4, we map our CSS variables to Tailwind utilities here.
-  This automatically creates classes like: 
-  bg-accent-primary, text-accent-secondary, font-orbitron 
-*/
+
 @theme {
   --color-accent-primary: var(--accent-primary);
   --color-accent-secondary: var(--accent-secondary);
@@ -20,15 +17,15 @@
   --image-gradient-dark: var(--gradient-dark);
 }
 
-/* Import Fonts */
 
-/* --- DYNAMIC THEME VARIABLES --- */
+
+
 :root {
   --bg-dark: #1E1E1E;
   --ui-dark: #414141;
   --text-primary: #F8F8F8;
   
-  /* Default Theme (Fire) */
+  
   --accent-primary: #FF5E00;
   --accent-secondary: #FFA07A;
   --accent-tertiary: #FF8C42;
@@ -39,7 +36,7 @@
   --shadow-glow: rgba(255, 94, 0, 0.3);
 }
 
-/* --- THEME CLASSES (Triggered by JS) --- */
+
 body {
   background-color: #121212;
   color: white;
@@ -49,7 +46,7 @@ body {
   transition: background-color 1s, color 1s;
 }
 
-/* These classes update the variables, which instantly updates Tailwind colors */
+
 body.theme-fire { --accent-primary: #FF5E00; --accent-secondary: #FF8C42; }
 body.theme-water { --accent-primary: #3FA9F5; --accent-secondary: #7BB3F0; }
 body.theme-grass { --accent-primary: #6FCF97; --accent-secondary: #A8D982; }
@@ -59,9 +56,9 @@ body.theme-ice { --accent-primary: #00BCD4; --accent-secondary: #4DD0E1; }
 body.theme-dragon { --accent-primary: #5D3FD3; --accent-secondary: #9575CD; }
 body.theme-dark { --accent-primary: #757575; --accent-secondary: #9E9E9E; }
 
-/* --- CUSTOM UTILITIES & ANIMATIONS --- */
 
-/* Glass Panel Utility */
+
+
 @utility glass-panel {
   background-color: rgb(255 255 255 / 0.05);
   backdrop-filter: blur(12px);
@@ -69,7 +66,7 @@ body.theme-dark { --accent-primary: #757575; --accent-secondary: #9E9E9E; }
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Animations */
+
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-40px) rotate(-5deg); }
@@ -91,7 +88,7 @@ body.theme-dark { --accent-primary: #757575; --accent-secondary: #9E9E9E; }
   background: var(--gradient-ember);
 }
 
-/* Custom Scrollbar */
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }

@@ -21,7 +21,7 @@ export default function FlameBackground() {
 
       setParticles(prev => [...prev, newParticle]);
 
-      // Remove particle after animation ends
+      
       setTimeout(() => {
         setParticles(prev => prev.filter(p => p.id !== newParticle.id));
       }, newParticle.duration * 1000);
@@ -32,7 +32,6 @@ export default function FlameBackground() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Dynamic Ash Particles */}
       {particles.map(particle => (
         <div
           key={particle.id}
@@ -44,7 +43,6 @@ export default function FlameBackground() {
         />
       ))}
 
-      {/* Static Background Flames */}
       <div className="flame-bg-element w-64 h-64 top-[10%] left-[10%]" />
       <div className="flame-bg-element w-48 h-48 bottom-[20%] right-[15%] delay-1000" />
       <div className="flame-bg-element w-80 h-80 top-[40%] right-[30%] delay-500 opacity-10" />

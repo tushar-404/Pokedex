@@ -15,7 +15,7 @@ export interface Pokemon {
   abilities: string[];
 }
 
-// ... existing interfaces ...
+
 
 export interface EvolutionStage {
   id: number;

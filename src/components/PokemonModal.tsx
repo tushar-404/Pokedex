@@ -3,11 +3,11 @@ import Image from 'next/image';
 import { useState, useMemo } from 'react';
 import React from 'react';
 
-// Import local data
+
 import evolutionsDataRaw from '../data/evolutions.json';
 import pokemonDataRaw from '../data/pokemon.json';
 
-// Type assertions
+
 const evolutionsData = evolutionsDataRaw as Record<string, EvolutionStage[]>;
 const allPokemon = pokemonDataRaw as Pokemon[];
 
@@ -17,7 +17,7 @@ interface Props {
   onNavigate: (id: number) => void;
 }
 
-// 🎨 Color Map
+
 const typeColors: Record<string, string> = {
   fire: 'bg-[#FF5E00]',
   water: 'bg-[#3FA9F5]',
@@ -39,9 +39,9 @@ const typeColors: Record<string, string> = {
   normal: 'bg-[#A8A878]',
 };
 
-// 🛡️ DEFENSIVE TYPE CHART (What hurts the defender?)
-// keys = Defending Type
-// values = Lists of attacking types that are Super Effective (2x), Not Very Effective (0.5x), or No Effect (0x)
+
+
+
 const defensiveChart: Record<string, { weak: string[]; resist: string[]; immune: string[] }> = {
   normal:   { weak: ['fighting'], resist: [], immune: ['ghost'] },
   fire:     { weak: ['water', 'ground', 'rock'], resist: ['fire', 'grass', 'ice', 'bug', 'steel', 'fairy'], immune: [] },
@@ -63,9 +63,9 @@ const defensiveChart: Record<string, { weak: string[]; resist: string[]; immune:
   fairy:    { weak: ['poison', 'steel'], resist: ['fighting', 'bug', 'dark'], immune: ['dragon'] },
 };
 
-// ⚔️ OFFENSIVE TYPE CHART (What does the type hit hard?)
-// Keys = Attacking Type
-// Values = Types it hits for Super Effective damage
+
+
+
 const offensiveChart: Record<string, string[]> = {
   normal:   [],
   fire:     ['grass', 'ice', 'bug', 'steel'],
@@ -90,18 +90,18 @@ const offensiveChart: Record<string, string[]> = {
 const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'stats' | 'moves' | 'info' | 'evolutions'>('stats');
 
-  // Helper: Get types for evolution chain
+  
   const getTypesForId = (id: number) => {
     const found = allPokemon.find(p => p.id === id);
     return found ? found.types : [];
   };
 
-  // 🧮 CALCULATE WEAKNESSES & STRENGTHS CORRECTLY
+  
   const { weaknesses, strengths } = useMemo(() => {
     if (!pokemon) return { weaknesses: [], strengths: [] };
 
-    // 1. Calculate Weaknesses (Defensive)
-    // We must check every single attacking type against the Pokemon's types
+    
+    
     const allTypes = Object.keys(defensiveChart);
     const calculatedWeaknesses: string[] = [];
 
@@ -115,14 +115,14 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
             else if (chart.immune.includes(attackType)) multiplier *= 0;
         });
 
-        // If the final multiplier is > 1 (e.g. 2x or 4x), it's a weakness
+        
         if (multiplier > 1) {
             calculatedWeaknesses.push(attackType);
         }
     });
 
-    // 2. Calculate Strengths (Offensive)
-    // Just combine the "Strong Against" lists of the Pokemon's own types
+    
+    
     const strengthSet = new Set<string>();
     pokemon.types.forEach((myType) => {
         const hitsHard = offensiveChart[myType.toLowerCase()] || [];
@@ -152,7 +152,6 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
         >✕</button>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Left Column: Image & Basic Info */}
           <div className="flex flex-col items-center justify-center">
             <div className="relative w-64 h-64 mb-6 flex justify-center items-center">
                 <div className="absolute inset-0 bg-gradient-ember opacity-30 blur-3xl animate-pulse" />
@@ -176,7 +175,6 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
             </div>
           </div>
 
-          {/* Right Column: Interactive Tabs */}
           <div className="flex flex-col h-full">
             <div className="flex gap-4 border-b border-white/10 mb-6 overflow-x-auto">
                 {(['stats', 'moves', 'info', 'evolutions'] as const).map((tab) => (
@@ -194,7 +192,6 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
             </div>
 
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-75">
-                {/* STATS */}
                 {activeTab === 'stats' && (
                     <div className="space-y-5">
                         {pokemon.stats.map((stat) => (
@@ -213,7 +210,6 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
                     </div>
                 )}
                 
-                {/* MOVES */}
                 {activeTab === 'moves' && (
                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {pokemon.moves.map((move) => (
@@ -224,7 +220,6 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
                     </div>
                 )}
                 
-                {/* INFO (Fixed Weaknesses) */}
                 {activeTab === 'info' && (
                    <div className="grid grid-cols-2 gap-4">
                         <div className="p-5 bg-white/5 rounded-2xl border border-white/10 text-center">
@@ -268,7 +263,6 @@ const PokemonModal: React.FC<Props> = ({ pokemon, onClose, onNavigate }) => {
                     </div>
                 )}
 
-                {/* EVOLUTIONS (With Type Pills and Horizontal Layout) */}
                 {activeTab === 'evolutions' && (
                     <div className="flex flex-col items-center justify-center h-full min-h-87.5">
                         {evolutionChain.length > 0 ? (

@@ -7,12 +7,12 @@ interface Props {
   onClick: (p: Pokemon) => void;
 }
 
-// ✅ 1. Define the specific colors for every type
+
 const typeColors: Record<string, string> = {
   fire: 'bg-[#FF5E00]',
   water: 'bg-[#3FA9F5]',
   grass: 'bg-[#7AC142]',
-  electric: 'bg-[#FFD700] text-black', // Yellow needs black text
+  electric: 'bg-[#FFD700] text-black', 
   psychic: 'bg-[#F85888]',
   ice: 'bg-[#98D8D8]',
   dragon: 'bg-[#7038F8]',
@@ -60,7 +60,7 @@ const PokemonCard: React.FC<Props> = ({ pokemon, onClick }) => {
         {pokemon.types.map((type) => (
           <span 
             key={type} 
-            // ✅ 2. Use the map here to apply the correct color
+            
             className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-white/20 backdrop-blur-sm shadow-sm
               ${typeColors[type] || 'bg-gray-700'} bg-opacity-80`}
           >
