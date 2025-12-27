@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Condensed:wght@400;700;900&display=swap');
+
+@import "tailwindcss";
+
+/* In Tailwind v4, we map our CSS variables to Tailwind utilities here.
+  This automatically creates classes like: 
+  bg-accent-primary, text-accent-secondary, font-orbitron 
+*/
+@theme {
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-tertiary: var(--accent-tertiary);
+  
+  --color-bg-dark: var(--bg-dark);
+  --color-bg-ui: var(--ui-dark);
+  
+  --font-orbitron: 'Orbitron', sans-serif;
+  
+  --image-gradient-ember: var(--gradient-ember);
+  --image-gradient-dark: var(--gradient-dark);
+}
+
+/* Import Fonts */
+
+/* --- DYNAMIC THEME VARIABLES --- */
+:root {
+  --bg-dark: #1E1E1E;
+  --ui-dark: #414141;
+  --text-primary: #F8F8F8;
+  
+  /* Default Theme (Fire) */
+  --accent-primary: #FF5E00;
+  --accent-secondary: #FFA07A;
+  --accent-tertiary: #FF8C42;
+  
+  --gradient-ember: radial-gradient(circle, var(--accent-primary), var(--accent-secondary), transparent);
+  --gradient-dark: linear-gradient(135deg, #1E1E1E, #2A2A2A);
+  
+  --shadow-glow: rgba(255, 94, 0, 0.3);
+}
+
+/* --- THEME CLASSES (Triggered by JS) --- */
+body {
+  background-color: #121212;
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-orbitron);
+  transition: background-color 1s, color 1s;
+}
+
+/* These classes update the variables, which instantly updates Tailwind colors */
+body.theme-fire { --accent-primary: #FF5E00; --accent-secondary: #FF8C42; }
+body.theme-water { --accent-primary: #3FA9F5; --accent-secondary: #7BB3F0; }
+body.theme-grass { --accent-primary: #6FCF97; --accent-secondary: #A8D982; }
+body.theme-electric { --accent-primary: #FFEB3B; --accent-secondary: #FFF176; }
+body.theme-psychic { --accent-primary: #E91E63; --accent-secondary: #F06292; }
+body.theme-ice { --accent-primary: #00BCD4; --accent-secondary: #4DD0E1; }
+body.theme-dragon { --accent-primary: #5D3FD3; --accent-secondary: #9575CD; }
+body.theme-dark { --accent-primary: #757575; --accent-secondary: #9E9E9E; }
+
+/* --- CUSTOM UTILITIES & ANIMATIONS --- */
+
+/* Glass Panel Utility */
+@utility glass-panel {
+  background-color: rgb(255 255 255 / 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-40px) rotate(-5deg); }
+}
+
+@keyframes ashFloat {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+}
+
+.flame-bg-element {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.15;
+  animation: float 12s ease-in-out infinite;
+  z-index: -1;
+  background: var(--gradient-ember);
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 4px;
+}

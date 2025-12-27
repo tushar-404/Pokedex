@@ -1,49 +1,36 @@
-# Pokédex 🔍✨
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Hey there!  
-Welcome to my Pokédex site — made for all the Pokémon fans who just wanna find their favorite mons fast and chill 😎
+## Getting Started
 
-### 🔗 Live Site
-[Check it out here!](https://tushar-404.github.io/Pokedex/)
+First, run the development server:
 
----
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## 🧠 What’s This All About?
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- Search any Pokémon by name  
-- See their official art, stats, types, and abilities  
-- No more digging through bulky wikis  
-- Super quick and looks great on desktop & mobile
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
----
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## 🛠 Built With
+## Learn More
 
-- HTML  
-- CSS  
-- JavaScript  
-- PokéAPI (for all the Pokémon data)
+To learn more about Next.js, take a look at the following resources:
 
----
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## 🚀 How To Use
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-1. Head over to the [site](https://tushar-404.github.io/Pokedex/)
-2. Type a Pokémon name in the search bar (like `pikachu`, `charizard`, whatever!)
-3. Boom — all the info pops up instantly ⚡
+## Deploy on Vercel
 
----
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## 🙌 Why I Made This
-
-Honestly? Just wanted to build something fun with JS and APIs — and what’s cooler than a Pokédex? 😤  
-Plus, it’s a great way to practice frontend skills and play with API data.
-
----
-
-## 🤝 Wanna Help Out?
-
-Fork it, make it better, and send a PR!  
-Or just open an issue if you spot something weird.
-
-### 💬 Got ideas? Hit me up!
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
